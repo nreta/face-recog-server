@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Загрузить фотографию сотрудника</title>
+    <style>
+      /* General body styling */
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: rgb(48, 48, 48);
+      }
+
+      /* Page title styling */
+      h1 {
+        font-size: 36px;
+        color: white;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      /* Form container styling */
+      form {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* Label and input styling */
+      label {
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      input[type="file"] {
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Button styling */
+      button {
+        background-color: #28a745;
+        color: white;
+        padding: 12px 25px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.1s ease;
+      }
+
+      button:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+      }
+
+      /* Back to employee list link styling */
+      a {
+        color: #007bff;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        transition: color 0.3s ease-in-out;
+      }
+
+      a:hover {
+        color: #0056b3;
+      }
+      .error-message {
+        color: #dc3545;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: none; /* Hidden by default */
+      }
+      /* Responsive styling for smaller screens */
+      @media (max-width: 600px) {
+        body {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        form {
+          width: 100%;
+          padding: 20px;
+        }
+      }
+      .success-message {
+        color: #155724;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Загрузить фотографию сотрудника</h1>
+
+    <!-- Error message span -->
+    {% if error %}
+    <div class="error-message" style="display: block">{{ error }}</div>
+    {% endif %}
+
+    <!-- Success message -->
+    {% if success %}
+    <div class="success-message" style="display: block">{{ success }}</div>
+    {% endif %}
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <!-- Rest of your form remains the same -->
+      <label for="name">Имя сотрудника: </label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="file">Загрузить изображение:</label>
+      <input type="file" id="file" name="file" accept="image/*" required />
+
+      <button type="submit">Загрузить</button>
+    </form>
+
+    <a href="/employees">Вернуться к списку сотрудников</a>
+
+    <script>
+      // Hide messages after 5 seconds
+      setTimeout(() => {
+        const errorMsg = document.querySelector('.error-message');
+        const successMsg = document.querySelector('.success-message');
+        if (errorMsg) errorMsg.style.display = 'none';
+        if (successMsg) successMsg.style.display = 'none';
+      }, 5000);
+
+      // Clear form after successful upload
+      {% if success %}
+      document.querySelector('form').reset();
+      {% endif %}
+    </script>
+  </body>
+</html>

@@ -1,190 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Attendance System</title>
-
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <style>
-        /* Moving gradient background */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(45deg, #007bff, #ff6ec4, #8e44ad);
-            background-size: 400% 400%;
-            animation: gradientMove 10s ease infinite;
-        }
+      /* Moving gradient background */
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+        color: #fff;
+        background: #111;
+      }
+      .bgAnimation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        display: grid;
+        grid-template-columns: repeat(20, 1fr);
+        grid-template-rows: repeat(20, 1fr);
+        background: #1d1d1d;
+        filter: saturate(2);
+        overflow: hidden;
+      }
+      .colorBox {
+        filter: brightness(1.1);
+        transition: 2s ease;
+        position: relative;
+        margin: 2px;
+        background: #1d1d1d;
+      }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+      .colorBox:hover {
+        background: #00bfff;
+        transition-duration: 0s;
+      }
 
-        h1 {
-            color: white;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-        }
+      .backgroundAmim {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background: #00bfff;
+        filter: blur(60px);
+        animation: animBack 6s linear infinite;
+      }
 
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+      @keyframes animBack {
+        0% {
+          top: -60px;
         }
-
-        button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
+        100% {
+          top: 120%;
         }
+      }
 
-        /* Modal styles */
-        .modal {
-            display: none; /* Ensure modal is hidden by default */
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            align-items: center;
-            justify-content: center;
+      h1 {
+        color: white;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+      p {
+        color: black;
+      }
+
+      button {
+        z-index: 1;
+        padding: 15px 30px;
+        font-size: 17px;
+
+        background-color: rgb(32, 121, 151);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.1s;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        margin: 10px;
+        width: 200px; /* Set a fixed width */
+        display: inline-block; /* Ensures width is respected */
+        text-align: center; /* Centers text within fixed width */
+        box-sizing: border-box; /* Includes padding in width calculation */
+      }
+
+      button:hover {
+        background-color: rgb(143, 28, 20);
+        transform: scale(1.05);
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none; /* Ensure modal is hidden by default */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        width: 80%;
+        max-width: 400px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .spinner {
+        margin: 10px auto;
+        border: 4px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 4px solid rgb(0, 174, 255);
+
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite, glow 1.5s ease-in-out infinite;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+        box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+      }
+      @keyframes glow {
+        0%,
+        100% {
+          box-shadow: 0 0 10px rgba(0, 123, 255, 0.8);
         }
-
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        50% {
+          box-shadow: 0 0 20px rgba(0, 123, 255, 1);
         }
-
-        .spinner {
-            margin: 10px auto;
-            border: 4px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 4px solid #007bff;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotateY(0deg) rotateZ(0deg);
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        100% {
+          transform: rotateY(360deg) rotateZ(360deg);
         }
+      }
 
-        #status {
-            margin-top: 15px;
-            font-size: 18px;
-            font-weight: bold;
-        }
+      #status {
+        margin-top: 15px;
+        font-size: 18px;
+        font-weight: bold;
+      }
 
-        .success { color: #28a745; }
-        .warning { color: #ffc107; }
-        .error { color: #dc3545; }
+      .success {
+        color: #28a745;
+      }
+      .warning {
+        color: #ffc107;
+      }
+      .error {
+        color: #dc3545;
+      }
 
-        /* Close button inside the modal */
-        .close-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+      /* Close button inside the modal */
+      .close-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: rgb(32, 121, 151);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
 
-        .close-btn:hover {
-            background-color: #c82333;
-        }
+      .close-btn:hover {
+        background-color: #c82333;
+      }
+      .side-menu {
+        position: fixed; /* Fixes the icon to the viewport */
+        top: 10px; /* Distance from the top */
+        right: 10px; /* Distance from the left */
+        font-size: 30px; /* Adjust size of the icon */
+        z-index: 1000; /* Ensures it stays above other content */
+        cursor: pointer; /* Changes cursor to pointer on hover */
+        color: white;
+      }
+      .side-menu:hover {
+        color: gray; /* White text on hover */
+        text-decoration: none; /* Remove underline on hover */
+        transform: scale(1.1); /* Pop out effect by scaling the link */
+        transition: background-color 0.3s, color 0.3s,
+          transform 0.3s ease-in-out; /* Smooth transition for both hover and transform */
+      }
+      /* Modal styles */
+      .side-modal {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7); /* Background overlay */
+        z-index: 999; /* Makes sure the modal stays above other content */
+        align-items: center;
+        justify-content: center;
+      }
+      /* Modal Content */
+      .side-modal-content {
+        background-color: white;
+        padding: 20px;
+        padding-top: 30px;
+        text-align: center;
+        border-radius: 10px;
+        width: 300px;
+      }
+      .modal-link {
+        display: block;
+        margin-bottom: 20px;
+        font-size: 18px;
+        color: black;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .modal-link:hover {
+        color: gray; /* White text on hover */
+        text-decoration: none; /* Remove underline on hover */
+        transform: scale(1.1); /* Pop out effect by scaling the link */
+        transition: background-color 0.3s, color 0.3s,
+          transform 0.3s ease-in-out; /* Smooth transition for both hover and transform */
+      }
+      .modal-link:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.7); /* Adds a blue glow around the link */
+      }
     </style>
-</head>
-<body>
-    <h1>Attendance System</h1>
-    <button id="start-button">Start Attendance</button>
+  </head>
+  <body>
+    <div class="bgAnimation" id="bgAnimation">
+      <div class="backgroundAmim"></div>
+    </div>
+    <i class="fa-solid fa-bars side-menu" onclick="toggleModal()"></i>
+    <div id="sideModal" class="side-modal">
+      <div class="side-modal-content">
+        <a href="/employees" class="modal-link"
+          >Просмотреть список сотрудников</a
+        >
+        <button class="close-btn" onclick="toggleModal()">Закрывать</button>
+      </div>
+    </div>
+
+    <h1>Здравствуй, друг</h1>
+    <button id="start-button">Начать смену</button>
+    <button id="end-button">Закончить смену</button>
 
     <!-- Modal Popup -->
     <div id="modal" class="modal">
-        <div class="modal-content">
-            <div id="spinner-container" class="spinner"></div>
-            <div id="status"></div>
-            <button id="close-button" class="close-btn" style="display: none;">Close</button>
-        </div>
+      <div class="modal-content">
+        <div id="spinner-container" class="spinner"></div>
+        <p id="instuc">
+          Пожалуйста, встаньте перед камерой и не двигайтесь, процесс занимает
+          всего пару секунд
+        </p>
+
+        <div id="status"></div>
+        <button id="close-button" class="close-btn" style="display: none">
+          Close
+        </button>
+      </div>
     </div>
 
+    <audio id="success-sound" src="/photos/login.mp3" preload="auto"></audio>
     <script>
-        const startButton = document.getElementById('start-button');
-        const modal = document.getElementById('modal');
-        const statusDiv = document.getElementById('status');
-        const spinner = document.getElementById('spinner-container');
-        const closeButton = document.getElementById('close-button');
+      const startButton = document.getElementById("start-button");
+      const endButton = document.getElementById("end-button");
+      const modal = document.getElementById("modal");
+      const statusDiv = document.getElementById("status");
+      const spinner = document.getElementById("spinner-container");
+      const closeButton = document.getElementById("close-button");
+      const instText = document.getElementById("instuc");
 
-        // Ensure modal is hidden when the page loads
-        window.onload = function() {
-            modal.style.display = 'none';  // Hide modal on load
-        };
+      // Ensure modal is hidden when the page loads
+      window.onload = function () {
+        modal.style.display = "none"; // Hide modal on load
+      };
+      const bgAnimation = document.getElementById("bgAnimation");
 
-        startButton.onclick = function() {
-            // Open the modal
-            modal.style.display = 'flex';
-            statusDiv.innerHTML = '';  // Clear status message
-            spinner.style.display = 'block';  // Show spinner
+      const numberOfColorBoxes = 400;
 
-            fetch('/start_attendance')
-                .then(response => response.json())
-                .then(data => {
-                    spinner.style.display = 'none';  // Hide spinner
-                    closeButton.style.display = 'inline-block';  // Show close button
+      for (let i = 0; i < numberOfColorBoxes; i++) {
+        const colorBox = document.createElement("div");
+        colorBox.classList.add("colorBox");
+        bgAnimation.append(colorBox);
+      }
+      function handleAttendance(endpoint) {
+        // Open the modal
+        modal.style.display = "flex";
+        statusDiv.innerHTML = ""; // Clear status message
+        spinner.style.display = "block"; // Show spinner
+        instText.style.display = "block";
+        closeButton.style.display = "inline-block"; // Show close button
 
-                    if (data.status === "Success") {
-                        statusDiv.innerHTML = `✅ Attendance recorded for <strong>${data.name}</strong>.`;
-                        statusDiv.className = 'success';
-                    } else if (data.status === "AlreadyRecorded") {
-                        statusDiv.innerHTML = `👀 <strong>${data.name}</strong> already recorded.`;
-                        statusDiv.className = 'warning';
-                    } else {
-                        statusDiv.innerHTML = '❌ No face detected.';
-                        statusDiv.className = 'error';
-                    }
-                })
-                .catch(error => {
-                    spinner.style.display = 'none';  // Hide spinner
-                    closeButton.style.display = 'inline-block';  // Show close button
-                    statusDiv.innerHTML = '❌ Error starting attendance.';
-                    statusDiv.className = 'error';
-                    console.error('Error:', error);
-                });
-        };
+        fetch(endpoint)
+          .then((response) => response.json())
+          .then((data) => {
+            spinner.style.display = "none"; // Hide spinner
+            closeButton.style.display = "inline-block"; // Show close button
 
-        // Close the modal when the "Close" button is clicked
-        closeButton.onclick = function() {
-            modal.style.display = 'none';
-        };
-
-        // Close the modal if the user clicks outside the modal content
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
+            if (data.status === "Success") {
+              statusDiv.innerHTML = `✅ Успешно, хорошего рабочего дня <strong>${data.name}</strong>.`;
+              statusDiv.className = "success";
+              instText.style.display = "none";
+              document.getElementById("success-sound").play();
+            } else if (data.status === "AlreadyRecorded") {
+              statusDiv.innerHTML = `⚠️ Посещаемость уже зарегистрирована <strong>${data.name}</strong>.`;
+              statusDiv.className = "warning";
+              instText.style.display = "none";
+            } else {
+              statusDiv.innerHTML = "❌ Лицо не обнаружено.";
+              statusDiv.className = "error";
+              instText.style.display = "none";
             }
-        };
+          })
+          .catch((error) => {
+            spinner.style.display = "none"; // Hide spinner
+            closeButton.style.display = "inline-block"; // Show close button
+            statusDiv.innerHTML = "❌ Ошибка при попытке начать посещение.";
+            statusDiv.className = "error";
+            instText.style.display = "none";
+            console.error("Error:", error);
+          });
+      }
+
+      startButton.onclick = function () {
+        handleAttendance("/start_attendance");
+      };
+
+      endButton.onclick = function () {
+        handleAttendance("/end_attendance");
+      };
+
+      // Close the modal and release the camera when the "Close" button is clicked
+      closeButton.onclick = function () {
+        modal.style.display = "none";
+
+        // Call the backend to release the camera
+        fetch("/release_camera", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data.status); // Log the response from the backend
+          })
+          .catch((error) => {
+            console.error("Error releasing camera:", error);
+          });
+      };
+      function toggleModal() {
+        const modal = document.getElementById("sideModal");
+        modal.style.display = modal.style.display === "flex" ? "none" : "flex";
+      }
     </script>
-</body>
+  </body>
 </html>
